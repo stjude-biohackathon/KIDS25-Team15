@@ -7,6 +7,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import logo from '@assets/wall-e.svg';
 import MicRipple from '@components/MicRipple';
+import { userRoles } from '@assets/userRoles';
+import { useAppState } from '@components/AppStateProvider/AppStateProvider';
+import nemo from '@assets/nemo.png';
 
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
@@ -16,6 +19,7 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 
 function Header() {
     const [appName,] = React.useState('Jude-E');
+    const { appState } = useAppState();
 
     return (
         <AppBar position="static" sx={{ backgroundColor: '#fff' }}>
@@ -54,9 +58,8 @@ function Header() {
                     >
                         {appName}
                     </Typography>
-
                     <Box sx={{ flexGrow: 1 }} />
-
+                    {appState.userRole && (<>{getUserImg(appState.userRole)}</>)}
                     <MicRipple />
                 </Toolbar>
             </Container>
@@ -65,3 +68,16 @@ function Header() {
 }
 
 export default Header;
+
+function getUserImg(userRole: string) {
+    const user = userRoles[userRole];
+    if (!user) return null;
+
+    const imgHeight = 40;
+    return (
+        <img src={user.img} alt={user.label} style={{
+            width: `${imgHeight * user.percentWthIncr}px`,
+            height: `${imgHeight}px`
+        }} />
+    )
+}

@@ -1,19 +1,16 @@
 import { Box, Button } from "@mui/material"
-import dory from '@assets/dory.png'
-import nemo from '@assets/nemo.png'
+import { userRoles as users } from "@assets/userRoles"
+import { useAppState } from '@components/AppStateProvider/AppStateProvider';
 
 export const UserBtns = ({ onNext }: { onNext: () => void }) => {
+    const { setKey } = useAppState()
+    
+    const handleClick = (id: string) => {
+        setKey("userRole", id)
+        onNext()
+    }
+    
     const imgHeight = 140
-    const users = [{
-        label: "Kid",
-        img: nemo,
-        //Calculated based on the image aspect ratio
-        percentWthIncr: 1.72
-    }, {
-        label: "Parent/Caregiver",
-        img: dory,
-        percentWthIncr: 1.16
-    }]
 
     return (
         <Box sx={{
@@ -24,19 +21,23 @@ export const UserBtns = ({ onNext }: { onNext: () => void }) => {
             height: "80vh",
         }}>
             <>
-
-                {users.map(user => (
+                {(Object.values(users) as Array<{
+                    id: string;
+                    label: string;
+                    img: string;
+                    percentWthIncr: number;
+                }>).map(user => (
                     <Button key={user.label} variant="contained" style={{
                         fontSize: "6em",
                         backgroundColor: "#D11947",
                         borderRadius: "20px",
                         margin: "30px",
-                    }} onClick={onNext}>
+                    }} onClick={() => handleClick(user.id)}>
 
-                        <img src={user.img} alt={user.label} style={{ 
-                            width: `${imgHeight * user.percentWthIncr}px`, 
+                        <img src={user.img} alt={user.label} style={{
+                            width: `${imgHeight * user.percentWthIncr}px`,
                             height: `${imgHeight}px`
-                            }} />
+                        }} />
                         <span>{user.label}</span>
                     </Button>
                 ))}
