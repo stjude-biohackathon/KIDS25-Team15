@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useRef, useEffect } from "react";
+import { API_ENDPOINTS } from "@constants";
 
 interface Message {
     sender: "user" | "ai";
@@ -29,7 +30,7 @@ const ChatBox = () => {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:3001/api/chat", {
+            const response = await fetch(API_ENDPOINTS.CHAT_API, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ prompt: prompt }),
