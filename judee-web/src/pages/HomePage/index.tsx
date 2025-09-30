@@ -8,17 +8,21 @@ import { API_ENDPOINTS } from '@constants';
 import type { HTMLProps } from 'react';
 import { PAGES } from '@constants';
 import ChatBox from '@components/ChatBox';
+import { Welcome } from '@components/Welcome';
 
 
 export default function HomePage() {
-
+    const [showChatBox, setShowChatBox] = useState(false);
     return (
         <DefaultLayout>
 
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }} style={{ overflowX: 'auto' }}>
-                    <h4>Welcome to Judee!</h4>
-                    <ChatBox />
+                    {showChatBox ? (
+                        <ChatBox />
+                    ) : (
+                        <Welcome onNext={() => setShowChatBox(true)} />
+                    )}
                 </Grid>
             </Grid>
         </DefaultLayout >
