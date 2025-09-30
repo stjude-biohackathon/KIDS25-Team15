@@ -25,9 +25,9 @@ export default function HomePage() {
 
 const Screen = () => {
     const { appState, setKey } = useAppState();
-    
+
   return (
-    <Grid style={{ overflowX: 'auto' }}>
+    <Grid size={{ xs: 12 }} style={{ overflowX: 'auto' }}>
       {(!appState.screen || appState.screen === "welcome") && (
         <Welcome onNext={() => setKey("screen", "userBtns")} />
       )}

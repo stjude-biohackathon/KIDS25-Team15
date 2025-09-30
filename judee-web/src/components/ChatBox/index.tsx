@@ -1,9 +1,11 @@
 import { useState } from "react";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useRef, useEffect } from "react";
 import { API_ENDPOINTS } from "@constants";
+import { useAppState } from '@components/AppStateProvider/AppStateProvider';
 
 interface Message {
     sender: "user" | "ai";
@@ -21,6 +23,8 @@ const ChatBox = () => {
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPrompt(event.target.value);
     };
+
+    const { setKey } = useAppState()
 
     const handleSend = async () => {
         if (!prompt.trim()) return;
@@ -139,6 +143,13 @@ const ChatBox = () => {
                 bgcolor: 'background.default',
             }}
         >
+            {/* Return to welcome screen */}
+            <Button sx={{
+                height: 'auto',
+                justifyContent: 'right'
+            }} onClick={() => setKey("screen", "welcome")}>X
+            </Button>
+
             {/* Chat messages area */}
             <Box
                 sx={{
