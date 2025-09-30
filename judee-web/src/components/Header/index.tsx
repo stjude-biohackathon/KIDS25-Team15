@@ -9,7 +9,6 @@ import logo from '@assets/wall-e.svg';
 import MicRipple from '@components/MicRipple';
 import { userRoles } from '@assets/userRoles';
 import { useAppState } from '@components/AppStateProvider/AppStateProvider';
-import nemo from '@assets/nemo.png';
 
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
@@ -19,14 +18,14 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 
 function Header() {
     const [appName,] = React.useState('Jude-E');
-    const { appState } = useAppState();
+    const { appState, setKey } = useAppState();
 
     return (
         <AppBar position="static" sx={{ backgroundColor: '#fff' }}>
             <Container maxWidth="xl">
                 <Toolbar>
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, width: 64, height: 64 }}>
-                        <img src={logo} alt="St. Jude Children's Research Hospital" style={{ width: '100%', height: '100%' }} />
+                        <img src={logo} alt="St. Jude Children's Research Hospital" style={{ width: '100%', height: '100%' }} onClick={() => setKey("screen", "welcome")} />
                     </Box>
                     <Box
                         sx={{

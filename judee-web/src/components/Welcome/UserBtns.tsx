@@ -2,12 +2,12 @@ import { Box, Button } from "@mui/material"
 import { userRoles as users } from "@assets/userRoles"
 import { useAppState } from '@components/AppStateProvider/AppStateProvider';
 
-export const UserBtns = ({ onNext }: { onNext: () => void }) => {
+export const UserBtns = () => {
     const { setKey } = useAppState()
     
     const handleClick = (id: string) => {
         setKey("userRole", id)
-        onNext()
+        setKey("screen", "chat")
     }
     
     const imgHeight = 140

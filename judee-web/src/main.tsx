@@ -4,7 +4,7 @@ import './index.css';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { BrowserRouter, Route, Routes } from 'react-router';
-import { HomePage } from '@pages/HomePage/index.tsx';
+import HomePage from '@pages/HomePage/index.tsx';
 import theme from './theme';
 
 const AppProviders = ({ children }: { children: React.ReactNode }) => {

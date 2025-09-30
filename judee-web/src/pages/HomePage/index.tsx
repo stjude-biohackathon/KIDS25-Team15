@@ -1,5 +1,4 @@
 import { DefaultLayout } from '@components/Layout';
-import { useState } from 'react';
 import { Grid } from '@mui/material';
 // import { useNavigate } from 'react-router';
 
@@ -9,22 +8,31 @@ import { Grid } from '@mui/material';
 import ChatBox from '@components/ChatBox';
 import { Welcome } from '@components/Welcome';
 import { UserBtns } from '@components/Welcome/UserBtns';
-import { AppStateProvider } from '@components/AppStateProvider/AppStateProvider';
+import { AppStateProvider, useAppState } from '@components/AppStateProvider/AppStateProvider';
 
-export function HomePage() {
-    const [showComp, setShowComp] = useState<"userBtns" | "chat" | 'welcome'>('welcome')
 
+export default function HomePage() {
     return (
         <AppStateProvider>
             <DefaultLayout>
                 <Grid container spacing={2}>
-                    <Grid size={{ xs: 12 }} style={{ overflowX: 'auto' }}>
-                        {showComp == "welcome" && <Welcome onNext={() => setShowComp("userBtns")} />}
-                        {showComp === "userBtns" && <UserBtns onNext={() => setShowComp("chat")} />}
-                        {showComp === "chat" && <ChatBox />}
-                    </Grid>
+                    <Screen />
                 </Grid>
             </DefaultLayout>
         </AppStateProvider>
     )
+}
+
+const Screen = () => {
+    const { appState, setKey } = useAppState();
+    
+  return (
+    <Grid style={{ overflowX: 'auto' }}>
+      {(!appState.screen || appState.screen === "welcome") && (
+        <Welcome onNext={() => setKey("screen", "userBtns")} />
+      )}
+      {appState.screen === "userBtns" && <UserBtns/> }
+      {appState.screen === "chat" && <ChatBox />}
+    </Grid>
+  )
 }
