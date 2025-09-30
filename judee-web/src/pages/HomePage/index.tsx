@@ -9,19 +9,21 @@ import type { HTMLProps } from 'react';
 import { PAGES } from '@constants';
 import ChatBox from '@components/ChatBox';
 import { Welcome } from '@components/Welcome';
+import { UserBtns } from '@components/Welcome/UserBtns';
 
 
 export default function HomePage() {
-    const [showChatBox, setShowChatBox] = useState(false);
+    const [showUserBtn, setShowUserBtn] = useState(false);
+    const [showChat, setShowChat] = useState(false);
+
     return (
         <DefaultLayout>
-
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12 }} style={{ overflowX: 'auto' }}>
-                    {showChatBox ? (
-                        <ChatBox />
+                    {showChat ? <ChatBox /> : showUserBtn ? (
+                        <UserBtns onNext={() => setShowChat(true)} />
                     ) : (
-                        <Welcome onNext={() => setShowChatBox(true)} />
+                        <Welcome onNext={() => setShowUserBtn(true)} />
                     )}
                 </Grid>
             </Grid>
