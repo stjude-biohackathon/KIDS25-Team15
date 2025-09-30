@@ -1,7 +1,9 @@
+<!-- increase size of the logo -->
+<img src="./judee-web/src/assets/wall-e.svg" alt="Jude-E Logo" style="width: 200px; height: auto; margin: 0 auto; display: block;"/>
+
 # Jude-E
 
 <!-- add image from judee-web/src/assets/wall-e.svg -->
-![Jude-E Logo](./judee-web/src/assets/wall-e.svg)
 
 Jude-E is an AI-powered assistant designed to help Patients navigate and understand St. Jude facility and resources available on the campus.
 
