@@ -23,9 +23,10 @@ export const Welcome = ({ onNext }: { onNext: () => void }) => {
                     {{ width: '100%', height: '100%' }} />
             </Box>
             <Button variant="contained" style={{
-                fontSize: "6em",
+                fontSize: "5em",
                 backgroundColor: "#D11947",
                 borderRadius: "20px",
+                maxWidth: "80vw",
             }}
                 onClick={onNext}>
                 Chat with Jude-E!

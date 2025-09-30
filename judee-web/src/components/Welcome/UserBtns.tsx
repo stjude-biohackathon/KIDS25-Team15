@@ -32,6 +32,7 @@ export const UserBtns = () => {
                         backgroundColor: "#D11947",
                         borderRadius: "20px",
                         margin: "30px",
+                        maxWidth: "80vw",
                     }} onClick={() => handleClick(user.id)}>
 
                         <img src={user.img} alt={user.label} style={{

@@ -136,7 +136,7 @@ const ChatBox = () => {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                height: `calc(70vh - 75px)`,
+                height: `calc(90vh - 75px)`,
                 justifyContent: 'flex-end',
                 p: 2,
                 mb: 2,
@@ -238,6 +238,7 @@ const ChatBox = () => {
                             background: 'transparent',
                             fontSize: 16,
                             padding: 8,
+                            color: 'inherit'
                         }}
                         disabled={loading}
                     />

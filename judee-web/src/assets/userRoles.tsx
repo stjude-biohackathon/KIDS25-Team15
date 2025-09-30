@@ -9,7 +9,7 @@ export const userRoles: Record<string, { label: string; id: string; img: string;
         //Calculated based on the image aspect ratio
         percentWthIncr: 1.72
     }, parent: {
-        label: "Parent/Caregiver",
+        label: "Parent/ Caregiver",
         id: "parent",
         img: dory,
         percentWthIncr: 1.16
