@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import Typography from '@mui/material/Typography';
@@ -8,6 +8,7 @@ import { useRef, useEffect, useCallback } from "react";
 import { API_ENDPOINTS } from "@constants";
 import { useAppState } from '@components/AppStateProvider/AppStateProvider';
 import ReactMarkdown from 'react-markdown';
+import { audio } from "motion/react-client";
 
 interface Message {
     sender: "user" | "ai";
@@ -68,6 +69,8 @@ const ChatBox = () => {
     ]);
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const [audioURL, setAudioURL] = useState<string | null>(null);
 
     // get user role from app state
     const { appState } = useAppState();
@@ -204,19 +207,16 @@ const ChatBox = () => {
         };
     }, [isListening, stopRecording]);
 
-    useEffect(()=>{
-        console.log('Messages updated:', messages);
-        const lastJudeeMessageObject = [...messages].reverse().find(msg => msg.sender === "ai");
-        const lastMessageByJudee = lastJudeeMessageObject?.content
-        const uniqueTextId = lastJudeeMessageObject?.text_id 
-        console.log('Last Jude-E message:', lastMessageByJudee);
+    const lastJudeeMessageObject = useMemo(() => {
+        return [...messages].reverse().find(msg => msg.sender === "ai");
+    }, [messages]);
+    const lastMessageByJudee = lastJudeeMessageObject?.content;
+    const uniqueTextId = lastJudeeMessageObject?.text_id;
 
-        /* need to send this to tts service */
+    useEffect(() => {
         if (lastMessageByJudee && lastMessageByJudee.trim() !== "") {
             const sendTextToSpeech = async () => {
                 try {
-
-
                     const formData = new FormData();
                     formData.append('text', lastMessageByJudee);
                     formData.append('text_id', uniqueTextId || '');
@@ -230,21 +230,38 @@ const ChatBox = () => {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
 
-                    // const blob = await response.blob();
-                    // const audioUrl = URL.createObjectURL(blob);
-                    
                     const data = await response.json();
                     const audioUrl = `${API_ENDPOINTS.TTS_BASE_URL}${data.audio_path}`;
-                    const audio = new Audio(audioUrl);
-                    console.log('response:',data);
-                    audio.play();
+                    setAudioURL(audioUrl);
                 } catch (error) {
                     console.error("Error fetching TTS audio:", error);
                 }
             };
             sendTextToSpeech();
         }
-    }, [messages])
+    }, [lastMessageByJudee, uniqueTextId]);
+
+    useEffect(() => {
+        let audio: HTMLAudioElement | null = null;
+
+        if (audioURL) {
+            // Stop previous audio if playing
+            if (window.__chatboxAudio && !window.__chatboxAudio.paused) {
+                window.__chatboxAudio.pause();
+                window.__chatboxAudio.currentTime = 0;
+            }
+            audio = new Audio(audioURL);
+            window.__chatboxAudio = audio;
+            audio.play();
+        }
+
+        return () => {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        };
+    }, [audioURL]);
 
     const handleSend = async () => {
         if (!prompt.trim()) return;
