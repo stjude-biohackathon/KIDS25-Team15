@@ -24,7 +24,12 @@ function Header() {
             <Container maxWidth="xl">
                 <Toolbar>
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, width: 64, height: 64 }}>
-                        <img src={logo} alt="St. Jude Children's Research Hospital" style={{ width: '100%', height: '100%' }} onClick={() => setKey("screen", "welcome")} />
+                        <img src={logo} alt="St. Jude Children's Research Hospital" 
+                        style={{ width: '100%', height: '100%' }} 
+                        onClick={() => {
+                            setKey("screen", "welcome")
+                            setKey("userRole", null)
+                        }} />
                     </Box>
                     <Box
                         sx={{

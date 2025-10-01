@@ -320,7 +320,10 @@ const ChatBox = () => {
             <Button sx={{
                 height: 'auto',
                 justifyContent: 'right'
-            }} onClick={() => setKey("screen", "welcome")}>X
+            }} onClick={() => {
+                setKey("screen", "welcome")
+                setKey("userRole", null)
+            }}>X
             </Button>
 
             {/* Chat messages area */}
