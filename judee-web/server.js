@@ -70,6 +70,8 @@ app.post("/api/chat", async (req, res) => {
       think: false,
       stream: false,
       temperature: 0.1,
+      top_p: 0.75,
+      top_k: 40,
     }),
   });
 

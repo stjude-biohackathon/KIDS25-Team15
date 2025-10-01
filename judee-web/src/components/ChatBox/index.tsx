@@ -469,7 +469,7 @@ const ChatBox = () => {
                 onSubmit={handleFormSubmit}
             >
                 <Box sx={{ flex: 1 }}>
-                    <input
+                    {/* <input
                         ref={inputRef}
                         type="text"
                         value={prompt}
@@ -485,7 +485,27 @@ const ChatBox = () => {
                             color: 'inherit',
                         }}
                         disabled={loading}
-                    />
+                    /> */}
+                    <div
+                        ref={inputRef}
+                        contentEditable={!loading}
+                        suppressContentEditableWarning={true}
+                        onInput={(e) => setPrompt((e.target as HTMLDivElement).innerText)}
+                        style={{
+                            width: '100%',
+                            minHeight: '1.5em',
+                            border: 'none',
+                            outline: 'none',
+                            background: 'transparent',
+                            fontSize: 32,
+                            padding: 8,
+                            color: 'inherit',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
+                        }}
+                    >
+                        {prompt.length === 0 ? 'Press the mic button...' : prompt}
+                    </div>
                 </Box>
                 <IconButton color="primary" type="submit" sx={{ ml: 1 }} disabled={prompt.trim() === '' || loading}>
                     <svg
@@ -493,7 +513,7 @@ const ChatBox = () => {
                         height="24"
                         width="24"
                         viewBox="0 0 24 24"
-                        fill="currentColor"
+                        fill="#7E1B2A"
                     >
                         <path d="M2 21l21-9-21-9v7l15 2-15 2z" />
                     </svg>
