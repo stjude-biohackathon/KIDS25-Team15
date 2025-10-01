@@ -12,6 +12,7 @@ import ReactMarkdown from 'react-markdown';
 interface Message {
     sender: "user" | "ai";
     content: string;
+    text_id?: string; // Optional text ID for TTS
 }
 
 // Helper functions for WAV creation
@@ -63,7 +64,7 @@ const createWAVBlob = (audioData: Float32Array[], sampleRate: number): Blob => {
 const ChatBox = () => {
     const [prompt, setPrompt] = useState('');
     const [messages, setMessages] = useState<Message[]>([
-        { sender: "ai", content: "Hello! How can I assist you today?" }
+        { sender: "ai", content: "Hello! How can I assist you today?", text_id: Math.random().toString(36).substr(2, 9) }
     ]);
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -199,6 +200,48 @@ const ChatBox = () => {
         };
     }, [isListening, stopRecording]);
 
+    useEffect(()=>{
+        console.log('Messages updated:', messages);
+        const lastJudeeMessageObject = [...messages].reverse().find(msg => msg.sender === "ai");
+        const lastMessageByJudee = lastJudeeMessageObject?.content
+        const uniqueTextId = lastJudeeMessageObject?.text_id 
+        console.log('Last Jude-E message:', lastMessageByJudee);
+
+        /* need to send this to tts service */
+        if (lastMessageByJudee && lastMessageByJudee.trim() !== "") {
+            const sendTextToSpeech = async () => {
+                try {
+
+
+                    const formData = new FormData();
+                    formData.append('text', lastMessageByJudee);
+                    formData.append('text_id', uniqueTextId || '');
+
+                    const response = await fetch(API_ENDPOINTS.TTS_API_URL, {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    // const blob = await response.blob();
+                    // const audioUrl = URL.createObjectURL(blob);
+                    
+                    const data = await response.json();
+                    const audioUrl = `${API_ENDPOINTS.TTS_BASE_URL}${data.audio_path}`;
+                    const audio = new Audio(audioUrl);
+                    console.log('response:',data);
+                    audio.play();
+                } catch (error) {
+                    console.error("Error fetching TTS audio:", error);
+                }
+            };
+            sendTextToSpeech();
+        }
+    }, [messages])
+
     const handleSend = async () => {
         if (!prompt.trim()) return;
         const userMessage: Message = { sender: "user", content: prompt };
@@ -255,7 +298,7 @@ const ChatBox = () => {
                                     const updated = [...prev];
                                     const lastIdx = updated.length - 1;
                                     if (updated[lastIdx]?.sender === "ai") {
-                                        updated[lastIdx] = { ...updated[lastIdx], content: aiContent };
+                                        updated[lastIdx] = { ...updated[lastIdx], content: aiContent, text_id: Math.random().toString(36).substr(2, 9)};
                                     }
                                     return updated;
                                 });
@@ -287,7 +330,7 @@ const ChatBox = () => {
             }
         } catch (error) {
             console.error("Error fetching response:", error);
-            setMessages(prev => [...prev, { sender: "ai", content: "Error retrieving response" }]);
+            setMessages(prev => [...prev, { sender: "ai", content: "Error retrieving response", text_id: Math.random().toString(36).substr(2, 9) }]);
         } finally {
             setLoading(false);
         }
@@ -363,7 +406,7 @@ const ChatBox = () => {
                                 {msg.sender === "ai" ? (
                                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                                 ) : (
-                                    msg.content
+                                    <>{msg.content}</>
                                 )}
                             </Typography>
                         </Box>

@@ -1,3 +1,4 @@
+from typing import Union
 from fastapi import FastAPI, File, UploadFile
 import chromadb
 from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
@@ -9,7 +10,15 @@ from typing import List, Tuple, Dict, Any, Optional
 import re
 from sklearn.metrics.pairwise import cosine_similarity
 
+from fastapi import Form
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from utils.tts import synthesize_text_to_wav, OUTPUT_DIR
+# resolve cors error from frontend
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
+app.mount("/audiofiles", StaticFiles(directory=OUTPUT_DIR), name="audiofiles")
 
 # resolve cors error from frontend
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,6 +34,59 @@ app.add_middleware(
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
+
+@app.post("/tts")
+async def synthesize(
+    text: str = Form(...),
+    text_id: Union[str, None] = Form(None)
+):
+    try:
+        result = synthesize_text_to_wav(
+            text=text,
+            server="grpc.nvcf.nvidia.com:443",
+            voice="Magpie-Multilingual.EN-US.Mia",
+            language_code="en-US",
+            sample_rate_hz=44100,
+            encoding="LINEAR_PCM",
+             metadata=[
+                ["function-id", "877104f7-e885-42b9-8de8-f6e4c6303969"],
+                ["authorization", "Bearer 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"]
+            ],
+            use_ssl=True,
+        )
+
+        # Build public URL (relative)
+        # file_url = f"/files/{Path(file_path).name}"
+
+        # return {
+        #     "text": text,
+        #     "file_url": file_url,
+        #     "time_spent": time_spent
+        # }
+        # Convert result to dict if possible
+        import json
+
+        def make_serializable(obj):
+            try:
+                json.dumps(obj)
+                return obj
+            except TypeError:
+                if hasattr(obj, "__dict__"):
+                    return {k: make_serializable(v) for k, v in obj.__dict__.items()}
+                return str(obj)
+
+        # if hasattr(result, "to_dict"):
+        #     result_dict = make_serializable(result.to_dict())
+        # elif hasattr(result, "__dict__"):
+        #     result_dict = make_serializable(result.__dict__)
+        # else:
+        #     result_dict = str(result)
+        return JSONResponse(content={"audio_path": result[0], "audio_id": text_id}, status_code=200)
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+    # return {"message": "This is text to audio endpoint"}
 
 # post endpoint with /get_context/ which will have question from forntend
 @app.post("/get_context/")

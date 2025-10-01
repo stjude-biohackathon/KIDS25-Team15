@@ -1,3 +1,5 @@
 backend/chroma/*
 backend/audio_samples/*
 backend/.DS_Store
+__pycache__
+.DS_Store
