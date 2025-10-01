@@ -24,6 +24,7 @@ app.post("/api/chat", async (req, res) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       question: prompt,
+      stream: true,
     }),
   });
 

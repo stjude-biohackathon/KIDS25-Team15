@@ -8,6 +8,8 @@ declare module '@mui/material/styles' {
     interface PaletteOptions {
         darkblue?: PaletteOptions['primary'];
         lightgrey?: PaletteOptions['primary'];
+        darkgreen?: PaletteOptions['primary'];
+        darkred?: PaletteOptions['primary'];
     }
 }
 
@@ -33,6 +35,12 @@ const theme = createTheme({
         },
         lightgrey: {
             main: '#878A8F',
+        },
+        darkgreen:{
+            main: '#004B23',
+        },
+        darkred:{
+            main: '#7E1B2A',
         }
     },
     typography: {

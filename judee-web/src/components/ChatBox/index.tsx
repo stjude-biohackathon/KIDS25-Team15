@@ -175,15 +175,16 @@ const ChatBox = () => {
                         </Typography>
                         <Box
                             sx={{
-                                bgcolor: msg.sender === "user" ? 'primary.light' : 'grey.100',
-                                color: msg.sender === "user" ? 'primary.contrastText' : 'text.primary',
+                                bgcolor: msg.sender === "user" ? 'darkblue.main' : 'darkred.main',
+                                // color: msg.sender === "user" ? 'primary.contrastText' : 'text.primary',
+                                color: 'primary.contrastText',
                                 p: 2,
                                 mt: 0.5,
                                 maxWidth: '80%',
                                 borderRadius: 2,
                             }}
                         >
-                            <Typography variant="body1">
+                            <Typography variant="body1" sx={{ fontSize: 24 }}>
                                 {msg.content}
                             </Typography>
                         </Box>
@@ -196,14 +197,14 @@ const ChatBox = () => {
                         </Typography>
                         <Box
                             sx={{
-                                bgcolor: 'grey.100',
+                                bgcolor: 'darkred.main',
                                 p: 2,
                                 mt: 0.5,
                                 maxWidth: '80%',
                                 borderRadius: 2,
                             }}
                         >
-                            <Typography variant="body1">
+                            <Typography variant="body1" sx={{ fontSize: 24 }}>
                                 ...
                             </Typography>
                         </Box>
@@ -236,9 +237,9 @@ const ChatBox = () => {
                             border: 'none',
                             outline: 'none',
                             background: 'transparent',
-                            fontSize: 16,
+                            fontSize: 32,
                             padding: 8,
-                            color: 'inherit'
+                            color: 'inherit',
                         }}
                         disabled={loading}
                     />
