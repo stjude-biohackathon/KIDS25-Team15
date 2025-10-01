@@ -1,17 +1,23 @@
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
+// import multer from "multer";
+import fs from "fs";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Configure multer for file uploads
+// const upload = multer({ dest: 'uploads/' });
 
 // prompt
 // date, time
 // 
 
 const CONSTANTS = {
-  CONTEXT_API: "http://localhost:8000/get_context",
+  CONTEXT_API: "http://localhost:8000/get_context/",
+  // TRANSCRIBE_API: "http://localhost:8000/get_transcribe/",
   OLLAMA_API: "http://localhost:11434",
 }
 
@@ -96,6 +102,47 @@ app.post('/get_context', async (req, res) => {
 
   res.send(context);
 });
+
+// app.post('/api/transcribe', async (req, res) => {
+//   try {
+//     // if (!req.file) {
+//     //   return res.status(400).json({ error: 'No file uploaded' });
+//     // }
+
+//     // Read the file as binary data
+//     // const fileBuffer = fs.readFileSync(req.file.path);
+//     console.log("Received file:", req.file, req.form);
+
+//     const transcriptResponse = await fetch(CONSTANTS.TRANSCRIBE_API, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         file: req.form,
+//       }),
+//     });
+
+//     if (!transcriptResponse.ok) {
+//       throw new Error(`Transcription API error: ${transcriptResponse.status}`);
+//     }
+
+//     const transcriptJson = await transcriptResponse.json();
+//     const transcriptText = transcriptJson.transcript || '';
+
+//     res.json({ transcript: transcriptText });
+//   } catch (error) {
+//     console.error('Transcription error:', error);
+//     res.status(500).json({ error: 'Transcription failed', details: error.message });
+//   } finally {
+//     // Clean up uploaded file
+//     if (req.file && req.file.path) {
+//       fs.unlink(req.file.path, (err) => {
+//         if (err) console.error('Error deleting temp file:', err);
+//       });
+//     }
+//   }
+// });
 
 app.listen(3001, () => {
   console.log("Ollama API running at http://localhost:3001");

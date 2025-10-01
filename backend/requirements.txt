@@ -3,3 +3,9 @@ uvicorn
 chromadb
 langchain
 langchain-community
+nvidia-riva-client
+setuptools==78.1.1
+grpcio==1.67.1
+grpcio-tools==1.67.1
+websockets==15.0.1
+python-multipart

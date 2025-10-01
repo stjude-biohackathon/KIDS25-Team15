@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { keyframes, styled } from '@mui/material/styles';
 import MicIcon from '@mui/icons-material/Mic';
 import IconButton from '@mui/material/IconButton';
@@ -42,14 +42,15 @@ const StyledRipple = styled('span')(({ theme }) => ({
     zIndex: 1,
 }));
 
-const MicRipple = () => {
-    const [isListening, setIsListening] = useState(false);
+const MicRipple = ({ isListening, handleMicClick }: { isListening: boolean, handleMicClick: () => void }) => {
+
+
     return (
         <>
             {/* Mic Icon */}
             <IconButton
-                color={isListening ? 'warning' : 'default'}
-                onClick={() => setIsListening((prev) => !prev)}
+                color={isListening ? 'warning' : 'secondary'}
+                onClick={handleMicClick}
                 sx={{
                     animation: isListening
                         ? 'pulse-radius 1.2s infinite cubic-bezier(0.4,0,0.2,1)'
@@ -59,7 +60,7 @@ const MicRipple = () => {
                     boxShadow: isListening
                         ? '0 0 0 1px #C10F3A'
                         : 'none',
-                    backgroundColor: 'transparent',
+                    backgroundColor: isListening ? 'transparent' : 'darkred.main',
                     '@keyframes pulse-radius': {
                         '0%': {
                             transform: 'scale(1)',

@@ -27,6 +27,7 @@ export const Welcome = ({ onNext }: { onNext: () => void }) => {
                 backgroundColor: "#D11947",
                 borderRadius: "20px",
                 maxWidth: "80vw",
+                textTransform: "none"
             }}
                 onClick={onNext}>
                 Chat with Jude-E!

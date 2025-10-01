@@ -6,7 +6,6 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import logo from '@assets/wall-e.svg';
-import MicRipple from '@components/MicRipple';
 import { userRoles } from '@assets/userRoles';
 import { useAppState } from '@components/AppStateProvider/AppStateProvider';
 
@@ -59,7 +58,6 @@ function Header() {
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     {appState.userRole && (<>{getUserImg(appState.userRole)}</>)}
-                    <MicRipple />
                 </Toolbar>
             </Container>
         </AppBar>
