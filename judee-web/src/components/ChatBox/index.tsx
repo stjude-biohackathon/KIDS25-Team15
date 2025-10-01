@@ -7,6 +7,7 @@ import MicRipple from '@components/MicRipple';
 import { useRef, useEffect, useCallback } from "react";
 import { API_ENDPOINTS } from "@constants";
 import { useAppState } from '@components/AppStateProvider/AppStateProvider';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
     sender: "user" | "ai";
@@ -348,7 +349,6 @@ const ChatBox = () => {
                         <Box
                             sx={{
                                 bgcolor: msg.sender === "user" ? 'darkblue.main' : 'darkred.main',
-                                // color: msg.sender === "user" ? 'primary.contrastText' : 'text.primary',
                                 color: 'primary.contrastText',
                                 p: 2,
                                 mt: 0.5,
@@ -357,7 +357,11 @@ const ChatBox = () => {
                             }}
                         >
                             <Typography variant="body1" sx={{ fontSize: 24 }}>
-                                {msg.content}
+                                {msg.sender === "ai" ? (
+                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                ) : (
+                                    msg.content
+                                )}
                             </Typography>
                         </Box>
                     </Box>
