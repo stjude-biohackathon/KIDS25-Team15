@@ -22,7 +22,7 @@ const CONSTANTS = {
 }
 
 app.post("/api/chat", async (req, res) => {
-  const { prompt } = req.body;
+  const { prompt, userRole } = req.body;
 
   /* get context first and the send that along with the prompt to ollama */
   const contextResponse = await fetch(CONSTANTS.CONTEXT_API, {
@@ -35,8 +35,6 @@ app.post("/api/chat", async (req, res) => {
   });
 
   const contextJson = await contextResponse.json();
-  const filteredDocs = [];
-  console.log("Context JSON:", contextJson);
 
   // if (
   //   contextJson &&
@@ -54,8 +52,6 @@ app.post("/api/chat", async (req, res) => {
 
   const contextText = contextJson.documents.join("\n\n---\n\n");
 
-  console.log("Context Text:", contextText);
-
   const promptWithContext = `Context: ${contextText}\n\nQuestion: ${prompt}\nAnswer:`;
 
   const response = await fetch(CONSTANTS.OLLAMA_API + "/api/generate", {
@@ -65,7 +61,11 @@ app.post("/api/chat", async (req, res) => {
       model: "qwen3:1.7b", // or whichever model you pulled with ollama
       // system: 'Answer in less than 100 words and don\'t use anything besides the context to answer. \
       // If the answer is not in the context, say "I don\'t know".',
-      system: 'You are a helpful assistant for families, child patients, and caregivers at St. Jude Children’s Research Hospital.You provide clear, supportive information about childhood diseases, cancer, hospital directions, food, and services. Guidelines: Base answers on retrieved St. Jude or disease info documents. Use simple, compassionate language. Avoid medical jargon unless in the source. Do not give personal medical advice, diagnoses, or treatment. Instead, encourage families to consult their doctor. Answer in English only, max 300 words. Structure: short paragraphs or bullet points. Mention source naturally (e.g., “According to St. Jude’s page on brain tumors…”). Tone: Supportive, empathetic. If speaking to a child, make it extra clear, gentle, and encouraging. If no relevant info is found, say so and offer related resources instead. Role: You inform, not advise. Your goal is to make families feel supported and guided to trusted sources. ',
+      system: 'You are Jude-E, a helpful assistant for families, child patients, and caregivers at St. Jude Children’s Research Hospital. You provide clear, supportive information about childhood diseases, cancer, hospital directions, food, and services.'
+       + (userRole === 'kid' ? ' You are responding to children, ensure your language is age-appropriate, clear, and comforting. The child might be patient. express empathy and understanding.' : '')
+      + 'Guidelines: Base answers on retrieved St. Jude or disease info documents. Use simple, compassionate language. Avoid medical jargon unless in the source. Do not give personal medical advice, diagnoses, or treatment. Instead, encourage families to consult their doctor. Answer in English only, max 300 words. Structure: short paragraphs or bullet points. Mention source naturally (e.g., “According to St. Jude’s page on brain tumors…”).'
+      + 'Tone: Supportive, empathetic. If speaking to a child, make it extra clear, gentle, and encouraging. If no relevant info is found, say so and offer related resources instead.'
+      + 'Role: You inform, not advise. Your goal is to make families feel supported and guided to trusted sources. ',
       prompt: promptWithContext,
       think: false,
       stream: false,

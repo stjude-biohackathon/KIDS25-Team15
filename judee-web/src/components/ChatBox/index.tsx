@@ -69,6 +69,10 @@ const ChatBox = () => {
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
+    // get user role from app state
+    const { appState } = useAppState();
+    const userRole = appState.userRole;
+
     const [isListening, setIsListening] = useState(false);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -253,7 +257,7 @@ const ChatBox = () => {
             const response = await fetch(API_ENDPOINTS.CHAT_API, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt: prompt }),
+                body: JSON.stringify({ prompt: prompt, userRole: userRole  }), // include userRole in request body
             });
 
             if (!response.ok) {
