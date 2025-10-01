@@ -1,2 +1,3 @@
 backend/chroma/*
 backend/audio_samples/*
+backend/.DS_Store
