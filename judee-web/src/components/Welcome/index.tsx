@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material"
-import logo from '@assets/wall-e.svg'
+import logo from '@assets/Jude-E.png'
 
 
 export const Welcome = ({ onNext }: { onNext: () => void }) => {
@@ -17,7 +17,7 @@ export const Welcome = ({ onNext }: { onNext: () => void }) => {
             <Box sx={{
                 display: { xs: 'none', md: 'flex' },
                 width: "25vw",
-                height: "25vw"
+                height: "30vw"
             }}>
                 <img src={logo} alt="St. Jude Children's Research Hospital" style=
                     {{ width: '100%', height: '100%' }} />
