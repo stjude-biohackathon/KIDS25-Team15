@@ -9,3 +9,5 @@ grpcio==1.67.1
 grpcio-tools==1.67.1
 websockets==15.0.1
 python-multipart
+scikit-learn
+sentence_transformers
