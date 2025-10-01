@@ -8,7 +8,7 @@ import riva.client
 from riva.client.proto.riva_audio_pb2 import AudioEncoding
 import riva.client.proto.riva_tts_pb2 as riva_tts
 
-OUTPUT_DIR = Path("files")
+OUTPUT_DIR = Path("audiofiles")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
