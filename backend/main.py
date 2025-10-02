@@ -49,8 +49,7 @@ async def synthesize(
             sample_rate_hz=44100,
             encoding="LINEAR_PCM",
              metadata=[
-                ["function-id", "877104f7-e885-42b9-8de8-f6e4c6303969"],
-                ["authorization", "Bearer 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"]
+                 # place metadata here, fuction id and authorization token
             ],
             use_ssl=True,
         )
