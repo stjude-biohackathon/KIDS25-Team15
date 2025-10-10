@@ -8,7 +8,7 @@ import { useRef, useEffect, useCallback } from "react";
 import { API_ENDPOINTS } from "@constants";
 import { useAppState } from '@components/AppStateProvider/AppStateProvider';
 import ReactMarkdown from 'react-markdown';
-import { audio } from "motion/react-client";
+// import { audio } from "motion/react-client";
 
 interface Message {
     sender: "user" | "ai";
@@ -187,6 +187,11 @@ const ChatBox = () => {
         recordingRef.current = [];
     }, []);
 
+    useEffect(() => {
+        handleSend();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [prompt]); // Trigger send when prompt changes
+
     const handleMicClick = () => {
         if (!isListening) {
             startRecording();
@@ -196,16 +201,16 @@ const ChatBox = () => {
     };
 
     // Clean up on unmount
-    useEffect(() => {
-        return () => {
-            if (timerRef.current) {
-                clearTimeout(timerRef.current);
-            }
-            if (isListening) {
-                stopRecording();
-            }
-        };
-    }, [isListening, stopRecording]);
+    // useEffect(() => {
+    //     return () => {
+    //         if (timerRef.current) {
+    //             clearTimeout(timerRef.current);
+    //         }
+    //         if (isListening) {
+    //             stopRecording();
+    //         }
+    //     };
+    // }, [isListening, stopRecording]);
 
     const lastJudeeMessageObject = useMemo(() => {
         return [...messages].reverse().find(msg => msg.sender === "ai");
@@ -510,8 +515,8 @@ const ChatBox = () => {
                 <IconButton color="primary" type="submit" sx={{ ml: 1 }} disabled={prompt.trim() === '' || loading}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        width="24"
+                        height="40"
+                        width="40"
                         viewBox="0 0 24 24"
                         fill="#7E1B2A"
                     >

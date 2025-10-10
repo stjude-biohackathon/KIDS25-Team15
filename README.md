@@ -9,6 +9,21 @@ Jude-E is an AI-powered assistant designed to help Patients navigate and underst
 
 ## How to run the project
 
+### Ollama
+
+Download and install Ollama by following instructions from this offical [Ollama site](https://ollama.ai/)
+
+	You can check if Ollama is running by visiting http://localhost:11434/ in your default browser.
+
+> [!CAUTION]
+> After installing Ollama, close any open Terminal/Command Prompt before you pull Qwen3:1.7b.
+
+Once you start Ollama, you have to pull qwen3:1.7b model by running following command:
+
+```
+ollama pull qwen3:1.7b
+```
+
 ### Frontend
 1. Install Node.js and npm if you haven't already.
 2. Navigate to the `judee-web` directory:

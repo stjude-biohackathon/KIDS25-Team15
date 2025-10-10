@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+// import React, { useState, useRef, useEffect } from 'react';
 import { keyframes, styled } from '@mui/material/styles';
 import MicIcon from '@mui/icons-material/Mic';
 import IconButton from '@mui/material/IconButton';
@@ -26,7 +26,7 @@ const RippleOverlay = () => (
     </>
 );
 
-const StyledRipple = styled('span')(({ theme }) => ({
+const StyledRipple = styled('span')(() => ({
     position: 'absolute',
     bottom: '20%',
     right: '-250px',
@@ -72,9 +72,13 @@ const MicRipple = ({ isListening, handleMicClick }: { isListening: boolean, hand
                             transform: 'scale(1)',
                         },
                     },
+                    height: 80,
+                    width: 80,
                 }}
             >
-                <MicIcon />
+                <MicIcon 
+                    sx={{ fontSize: 40, color: isListening ? '#C10F3A' : '#fff', zIndex: 2 }}
+                />
             </IconButton>
 
             {/* Ripple effect overlay */}

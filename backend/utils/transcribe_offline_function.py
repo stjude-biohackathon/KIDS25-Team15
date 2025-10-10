@@ -19,6 +19,7 @@ This will generate the required protobuf files.
 """
 
 import os
+from dotenv import load_dotenv
 import sys
 from pathlib import Path
 from typing import Optional, List, Union
@@ -305,30 +306,29 @@ def list_models(
 
 
 if __name__ == "__main__":
+    load_dotenv()
+    NVAPI_BEARER_TOKEN = os.getenv("NVAPI_BEARER_TOKEN")
     # Example usage matching the original command
     print("Example 1: Transcribing with NVCF service")
     print("=" * 60)
-    
     response = transcribe_file_offline(
         input_file="./data/examples/en-US_sample.wav",
         server="grpc.nvcf.nvidia.com:443",
         use_ssl=True,
         metadata=[
             ["function-id", "d3fe9151-442b-4204-a70d-5fcc597fd610"],
-            ["authorization", "Bearer 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"]
+            ["authorization", f"Bearer {NVAPI_BEARER_TOKEN}"]
         ],
         language_code="en-US",
         word_time_offsets=True,
         automatic_punctuation=True
     )
-    
     if response and len(response.results) > 0:
         print("\n" + "=" * 60)
         print("SUCCESS: Transcription completed!")
         print("=" * 60)
         transcript = response.results[0].alternatives[0].transcript
         print(f"\nFinal Transcript: {transcript}")
-        
         # Show word-level details if available
         if response.results[0].alternatives[0].words:
             print(f"\nNumber of words: {len(response.results[0].alternatives[0].words)}")

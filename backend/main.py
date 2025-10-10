@@ -11,12 +11,16 @@ import re
 from sklearn.metrics.pairwise import cosine_similarity
 
 from fastapi import Form
+from dotenv import load_dotenv
+import os
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from utils.tts import synthesize_text_to_wav, OUTPUT_DIR
 # resolve cors error from frontend
 from fastapi.middleware.cors import CORSMiddleware
 
+load_dotenv()
+NVAPI_BEARER_TOKEN = os.getenv("NVAPI_BEARER_TOKEN")
 app = FastAPI()
 app.mount("/audiofiles", StaticFiles(directory=OUTPUT_DIR), name="audiofiles")
 
@@ -49,7 +53,8 @@ async def synthesize(
             sample_rate_hz=44100,
             encoding="LINEAR_PCM",
              metadata=[
-                 # place metadata here, fuction id and authorization token
+                ["function-id", "877104f7-e885-42b9-8de8-f6e4c6303969"],
+                ["authorization", f"Bearer {NVAPI_BEARER_TOKEN}"]
             ],
             use_ssl=True,
         )
@@ -96,6 +101,14 @@ async def get_context(request: dict):
     query_prefix: str = "query: "
     chroma_client = chromadb.PersistentClient(path="/app/chroma/.")
     collection = chroma_client.get_collection(name="jude-e-documents")
+
+    # get top 5 chunks from collection based on question
+    top_5_chunks = collection.query(query_texts=[question], n_results=5)
+    documents = top_5_chunks['documents']
+    distances = top_5_chunks['distances']
+    # for now just return the question
+    return {"question": question, "documents": documents, "distances": distances}
+
     # db_retriever: VectorStoreRetriever = chromadb.PersistentClient(path="/app/chroma/.").get_collection(name="jude-e-documents").as_retriever()
     # embedder = chromadb.utils.embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
     embedder = DefaultEmbeddingFunction()
@@ -226,7 +239,7 @@ async def get_transcribe(file: UploadFile = File(...)):
             use_ssl=True,
             metadata=[
                 ["function-id", "d3fe9151-442b-4204-a70d-5fcc597fd610"],
-                ["authorization", "Bearer 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"]
+                ["authorization", f"Bearer {NVAPI_BEARER_TOKEN}"]
             ],
             language_code="en-US",
             word_time_offsets=True,
