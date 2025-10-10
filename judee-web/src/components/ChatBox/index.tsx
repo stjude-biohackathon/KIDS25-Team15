@@ -193,6 +193,11 @@ const ChatBox = () => {
     }, [prompt]); // Trigger send when prompt changes
 
     const handleMicClick = () => {
+        // Stop any TTS audio playback
+        if (window.__chatboxAudio && !window.__chatboxAudio.paused) {
+            window.__chatboxAudio.pause();
+            window.__chatboxAudio.currentTime = 0;
+        }
         if (!isListening) {
             startRecording();
         } else {

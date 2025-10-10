@@ -52,6 +52,7 @@ const MicRipple = ({ isListening, handleMicClick }: { isListening: boolean, hand
                 color={isListening ? 'warning' : 'secondary'}
                 onClick={handleMicClick}
                 sx={{
+                    '&:hover': { backgroundColor: isListening ? 'transparent' : 'darkred.main' },
                     animation: isListening
                         ? 'pulse-radius 1.2s infinite cubic-bezier(0.4,0,0.2,1)'
                         : 'none',
